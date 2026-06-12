@@ -57,7 +57,7 @@
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[-27.48805729094574,-70.47603091418019],[-27.29553666238984,-70.06156593753765]]);
+        }).fitBounds([[-27.422451391586275,-70.39185772510575],[-27.326175647943586,-70.18462523678467]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -182,23 +182,10 @@
         });
         layer_googlehibrid_0;
         map.addLayer(layer_googlehibrid_0);
-        map.createPane('pane_googlesatelite_1');
-        map.getPane('pane_googlesatelite_1').style.zIndex = 401;
-        var layer_googlesatelite_1 = L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-            pane: 'pane_googlesatelite_1',
-            opacity: 0.184,
-            attribution: '',
-            minZoom: 1,
-            maxZoom: 28,
-            minNativeZoom: 0,
-            maxNativeZoom: 19
-        });
-        layer_googlesatelite_1;
-        map.addLayer(layer_googlesatelite_1);
-        map.createPane('pane_OSMStandard_2');
-        map.getPane('pane_OSMStandard_2').style.zIndex = 402;
-        var layer_OSMStandard_2 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            pane: 'pane_OSMStandard_2',
+        map.createPane('pane_OSMStandard_1');
+        map.getPane('pane_OSMStandard_1').style.zIndex = 401;
+        var layer_OSMStandard_1 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OSMStandard_1',
             opacity: 1.0,
             attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
             minZoom: 1,
@@ -206,8 +193,21 @@
             minNativeZoom: 0,
             maxNativeZoom: 19
         });
-        layer_OSMStandard_2;
-        map.addLayer(layer_OSMStandard_2);
+        layer_OSMStandard_1;
+        map.addLayer(layer_OSMStandard_1);
+        map.createPane('pane_googlesatelite_2');
+        map.getPane('pane_googlesatelite_2').style.zIndex = 402;
+        var layer_googlesatelite_2 = L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
+            pane: 'pane_googlesatelite_2',
+            opacity: 0.184,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_googlesatelite_2;
+        map.addLayer(layer_googlesatelite_2);
         function pop_CUADRANTE8_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
@@ -612,6 +612,9 @@
                     <tr>\
                         <td class="visible-with-data" id="Financiami" colspan="2"><strong>Financiami</strong><br />' + (feature.properties['Financiami'] !== null ? autolinker.link(String(feature.properties['Financiami']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Estado'] !== null ? autolinker.link(String(feature.properties['Estado']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
 			layer.on('popupopen', function(e) {
@@ -648,7 +651,7 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(242,223,134,0.984313725490196)',
+                fillColor: 'rgba(242,242,242,0.984313725490196)',
                 interactive: true,
             }
         }
@@ -701,8 +704,8 @@
             {label: '<img src="legend/CUADRANTE6_5.png" /> CUADRANTE 6', layer: layer_CUADRANTE6_5},
             {label: '<img src="legend/CUADRANTE7_4.png" /> CUADRANTE 7', layer: layer_CUADRANTE7_4},
             {label: '<img src="legend/CUADRANTE8_3.png" /> CUADRANTE 8', layer: layer_CUADRANTE8_3},]},
-            {label: "OSM Standard", layer: layer_OSMStandard_2, radioGroup: 'bm' },
-            {label: "google satelite", layer: layer_googlesatelite_1, radioGroup: 'bm' },
+            {label: "google satelite", layer: layer_googlesatelite_2, radioGroup: 'bm' },
+            {label: "OSM Standard", layer: layer_OSMStandard_1, radioGroup: 'bm' },
             {label: "google hibrid", layer: layer_googlehibrid_0, radioGroup: 'bm' },]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
@@ -898,7 +901,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Empresa": "str","Financiami": "str"};
+        var Filters = {"Estado": "str","Financiami": "str","Empresa": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -1094,6 +1097,70 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_Estado = document.createElement('div');
+            div_Estado.id = "div_Estado";
+            div_Estado.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Estado);
+            sel_Estado = document.createElement('select');
+            sel_Estado.multiple = true;
+            sel_Estado.size = 2;
+            sel_Estado.id = "sel_Estado";
+            var Estado_options_str = "<option value='' unselected></option>";
+            sel_Estado.onchange = function(){filterFunc()};
+            Estado_options_str  += '<option value="EN EJECUCION">EN EJECUCION</option>';
+            Estado_options_str  += '<option value="FINALIZADO">FINALIZADO</option>';
+            sel_Estado.innerHTML = Estado_options_str;
+            div_Estado.appendChild(sel_Estado);
+            var lab_Estado = document.createElement('div');
+            lab_Estado.innerHTML = 'Estado';
+            lab_Estado.className = 'filterlabel';
+            div_Estado.appendChild(lab_Estado);
+            var reset_Estado = document.createElement('div');
+            reset_Estado.innerHTML = 'clear filter';
+            reset_Estado.className = 'filterlabel';
+            reset_Estado.onclick = function() {
+                var options = document.getElementById("sel_Estado").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Estado.appendChild(reset_Estado);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Financiami = document.createElement('div');
+            div_Financiami.id = "div_Financiami";
+            div_Financiami.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Financiami);
+            sel_Financiami = document.createElement('select');
+            sel_Financiami.multiple = true;
+            sel_Financiami.size = 4;
+            sel_Financiami.id = "sel_Financiami";
+            var Financiami_options_str = "<option value='' unselected></option>";
+            sel_Financiami.onchange = function(){filterFunc()};
+            Financiami_options_str  += '<option value="FNDR">FNDR</option>';
+            Financiami_options_str  += '<option value="MINVU">MINVU</option>';
+            Financiami_options_str  += '<option value="MUNICIPAL">MUNICIPAL</option>';
+            Financiami_options_str  += '<option value="SUBDERE">SUBDERE</option>';
+            sel_Financiami.innerHTML = Financiami_options_str;
+            div_Financiami.appendChild(sel_Financiami);
+            var lab_Financiami = document.createElement('div');
+            lab_Financiami.innerHTML = 'Financiami';
+            lab_Financiami.className = 'filterlabel';
+            div_Financiami.appendChild(lab_Financiami);
+            var reset_Financiami = document.createElement('div');
+            reset_Financiami.innerHTML = 'clear filter';
+            reset_Financiami.className = 'filterlabel';
+            reset_Financiami.onclick = function() {
+                var options = document.getElementById("sel_Financiami").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Financiami.appendChild(reset_Financiami);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_Empresa = document.createElement('div');
             div_Empresa.id = "div_Empresa";
             div_Empresa.className= "filterselect";
@@ -1136,39 +1203,6 @@
                 filterFunc();
             };
             div_Empresa.appendChild(reset_Empresa);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_Financiami = document.createElement('div');
-            div_Financiami.id = "div_Financiami";
-            div_Financiami.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Financiami);
-            sel_Financiami = document.createElement('select');
-            sel_Financiami.multiple = true;
-            sel_Financiami.size = 4;
-            sel_Financiami.id = "sel_Financiami";
-            var Financiami_options_str = "<option value='' unselected></option>";
-            sel_Financiami.onchange = function(){filterFunc()};
-            Financiami_options_str  += '<option value="FNDR">FNDR</option>';
-            Financiami_options_str  += '<option value="MINVU">MINVU</option>';
-            Financiami_options_str  += '<option value="MUNICIPAL">MUNICIPAL</option>';
-            Financiami_options_str  += '<option value="SUBDERE">SUBDERE</option>';
-            sel_Financiami.innerHTML = Financiami_options_str;
-            div_Financiami.appendChild(sel_Financiami);
-            var lab_Financiami = document.createElement('div');
-            lab_Financiami.innerHTML = 'Financiami';
-            lab_Financiami.className = 'filterlabel';
-            div_Financiami.appendChild(lab_Financiami);
-            var reset_Financiami = document.createElement('div');
-            reset_Financiami.innerHTML = 'clear filter';
-            reset_Financiami.className = 'filterlabel';
-            reset_Financiami.onclick = function() {
-                var options = document.getElementById("sel_Financiami").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Financiami.appendChild(reset_Financiami);
         resetLabels([layer_CUADRANTE8_3,layer_CUADRANTE7_4,layer_CUADRANTE6_5,layer_CUADRANTE5_6,layer_CUADRANTE4_7,layer_CUADRANTE3_8,layer_CUADRANTE2_9,layer_CUADRANTE1_10,layer_PROYECTOSENEJECUCINAO2026_11]);
         map.on("zoomend", function(){
             resetLabels([layer_CUADRANTE8_3,layer_CUADRANTE7_4,layer_CUADRANTE6_5,layer_CUADRANTE5_6,layer_CUADRANTE4_7,layer_CUADRANTE3_8,layer_CUADRANTE2_9,layer_CUADRANTE1_10,layer_PROYECTOSENEJECUCINAO2026_11]);
